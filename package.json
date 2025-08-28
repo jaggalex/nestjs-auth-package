@@ -1,6 +1,6 @@
 {
   "name": "@yagas-cat/nestjs-auth",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "NestJS authentication and authorization package with JWT validation, permission and role-based access control",
   "type": "module",
   "author": "Yagas Cat",
