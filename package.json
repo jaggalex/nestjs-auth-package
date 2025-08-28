@@ -1,0 +1,8 @@
+{
+  "name": "@yagas-cat/nestjs-auth",
+  "version": "1.0.0",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com",
+    "access": "public"
+  }
+}
