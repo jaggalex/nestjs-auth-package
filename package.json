@@ -1,8 +1,8 @@
 {
   "name": "@yagas-cat/nestjs-auth",
   "version": "1.0.0",
-  "type": "module",
   "description": "NestJS authentication and authorization package with JWT validation, permission and role-based access control",
+  "type": "module",
   "author": "Yagas Cat",
   "license": "MIT",
   "main": "dist/index.js",
@@ -24,7 +24,9 @@
     "CHANGELOG.md"
   ],
   "scripts": {
-    "build": "rollup -c",
+    "build": "tsc",
+    "build:watch": "tsc --watch",
+    "clean": "rimraf dist",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
@@ -61,19 +63,27 @@
     "rxjs": "^7.8.1"
   },
   "devDependencies": {
+    "@nestjs/axios": "^4.0.1",
+    "@nestjs/common": "^11.1.6",
+    "@nestjs/core": "^11.1.6",
     "@rollup/plugin-commonjs": "^28.0.6",
     "@rollup/plugin-node-resolve": "^16.0.1",
+    "@types/express": "^5.0.3",
     "@types/jest": "^29.5.0",
-    "@types/node": "^20.0.0",
+    "@types/node": "^24.3.0",
     "@types/supertest": "^2.0.12",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
+    "axios": "^1.11.0",
     "eslint": "^8.50.0",
     "jest": "^29.7.0",
+    "reflect-metadata": "^0.2.2",
+    "rimraf": "^6.0.1",
     "rollup": "^4.0.0",
     "rollup-plugin-typescript2": "^0.36.0",
+    "rxjs": "^7.8.2",
     "ts-jest": "^29.1.0",
-    "typescript": "^5.2.0"
+    "typescript": "^5.9.2"
   },
   "engines": {
     "node": ">=18.0.0"
