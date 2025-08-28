@@ -1,0 +1,113 @@
+name: Release
+on:
+  push:
+    tags:
+      - 'v*.*.*'               # e.g. v1.0.0, v2.3.4‑beta.1, …
+  workflow_dispatch:
+# -----------------------------------------------------------------
+# Permissions – we only need to write packages.
+# -----------------------------------------------------------------
+permissions:
+  contents: read          # checkout source
+  packages: write         # npm publish to GitHub Packages
+  id-token: write        # (optional) for OIDC auth if you prefer it
+
+# -----------------------------------------------------------------
+# Jobs
+# -----------------------------------------------------------------
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        # Make sure every command runs from the repo root
+        working-directory: ${{ github.workspace }}
+
+    # -------------------------------------------------------------
+    # 1️⃣  Checkout the code
+    # -------------------------------------------------------------
+    steps:
+      - name: ⬇️ Checkout repository
+        uses: actions/checkout@v4
+        with:
+          # Fetch tags – needed for npm version calculation (if you ever use it)
+          fetch-depth: 0
+
+      # -------------------------------------------------------------
+      # 2️⃣  Set up Node.js (use the version you develop with)
+      # -------------------------------------------------------------
+      - name: ✨ Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'                # <-- adjust if you use another LTS
+          cache: 'npm'                         # npm‑cache (speed‑up subsequent runs)
+
+      # -------------------------------------------------------------
+      # 3️⃣  Configure npm to use GitHub Packages registry
+      # -------------------------------------------------------------
+      - name: 📦 Configure npm for GitHub Packages
+        # npm needs a token to be able to publish.
+        # The token can be either:
+        #   • the default GITHUB_TOKEN (works for most cases)   OR
+        #   • a personal access token with the `write:packages` scope
+        #   stored in a repository secret named `NPM_TOKEN`.
+        run: |
+          # The registry is the same for all scoped packages under this org
+          echo "//npm.pkg.github.com/:_authToken=${{secrets.GITHUB_TOKEN}}" > ~/.npmrc
+          echo "registry=https://npm.pkg.github.com" >> ~/.npmrc
+          # Ensure the correct scope is used (replace with your own org/name if different)
+          echo "@yagas-cat:registry=https://npm.pkg.github.com" >> ~/.npmrc
+
+      # -------------------------------------------------------------
+      # 4️⃣  Install dependencies (including dev‑deps for lint/test)
+      # -------------------------------------------------------------
+      - name: 📥 Install dependencies
+        run: npm ci
+
+      # -------------------------------------------------------------
+      # 5️⃣  Lint
+      # -------------------------------------------------------------
+      - name: 🔎 Lint source code
+        run: npm run lint
+
+      # -------------------------------------------------------------
+      # 6️⃣  Run tests
+      # -------------------------------------------------------------
+      - name: 🧪 Test
+        run: npm test
+
+      # -------------------------------------------------------------
+      # 7️⃣  Build (produces the `dist/` folder)
+      # -------------------------------------------------------------
+      - name: 🏗️ Build
+        run: npm run build
+
+      # -------------------------------------------------------------
+      # 8️⃣  Publish to GitHub Packages
+      # -------------------------------------------------------------
+      - name: 🚀 Publish package
+        # The `npm publish` command will read the `.npmrc` we created earlier.
+        # It works for both public and private packages on GitHub Packages.
+        run: npm publish
+        # In case you use a monorepo or need a different tag, add the
+        # appropriate arguments (e.g. `npm publish --tag beta`).
+
+      # -------------------------------------------------------------
+      # 9️⃣  Create a GitHub Release (optional but handy)
+      # -------------------------------------------------------------
+      - name: ✨ Create GitHub Release
+        if: startsWith(github.ref, 'refs/tags/')   # only on tag pushes
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}          # the tag that triggered the workflow
+          name: Release ${{ github.ref_name }}
+          generate_release_notes: true
+          # You can also attach the built tarball if you wish:
+          # files: |
+          #   *.tgz
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+# -----------------------------------------------------------------
+# End of workflow
+# -----------------------------------------------------------------
