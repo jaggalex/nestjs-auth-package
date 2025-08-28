@@ -48,12 +48,12 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git@github.com:jaggalex/nestjs-auth-package.git"
+    "url": "git+https://github.com/jaggalex/nestjs-auth-package.git"
   },
   "bugs": {
-    "url": "https://github.com:jaggalex/nestjs-auth-package/issues"
+    "url": "https://github.com/jaggalex/nestjs-auth-package/issues"
   },
-  "homepage": "https://github.com:jaggalex/nestjs-auth-package#readme",
+  "homepage": "https://github.com/jaggalex/nestjs-auth-package#readme",
   "peerDependencies": {
     "@nestjs/axios": "^3.0.0",
     "@nestjs/common": "^10.0.0",
