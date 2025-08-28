@@ -22,13 +22,17 @@ module.exports = {
   moduleFileExtensions: ['ts', 'js', 'json'],
   setupFilesAfterEnv: [],
   testPathIgnorePatterns: ['/node_modules/', '/dist/'],
-  moduleNameMapping: {
+  moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
   },
-  globals: {
-    'ts-jest': {
-      isolatedModules: true,
-    },
+  transform: {
+    '^.+\\.(t|j)s$': [
+      'ts-jest',
+      {
+        // сюда переносим все остальные параметры ts-jest
+        // (например, diagnostics, tsconfig, ...), но без isolatedModules
+      },
+    ],
   },
   verbose: true,
   forceExit: true,

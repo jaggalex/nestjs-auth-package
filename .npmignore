@@ -2,17 +2,19 @@
 src/
 
 # Tests
-**/*.test.ts
-**/*.spec.ts
-__tests__/
+src/**/*.spec.ts
+src/**/*.test.ts
+src/__tests__/
 coverage/
 
 # Development files
 rollup.config.js
 jest.config.js
+ts-jest.config.js
 tsconfig.json
 .eslintrc*
 .prettierrc*
+.npmrc
 
 # Development dependencies
 node_modules/
