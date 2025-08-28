@@ -1,6 +1,6 @@
 {
   "name": "@yagas-cat/nestjs-auth",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "NestJS authentication and authorization package with JWT validation, permission and role-based access control",
   "type": "module",
   "author": "Yagas Cat",
@@ -24,9 +24,9 @@
     "CHANGELOG.md"
   ],
   "scripts": {
-    "build": "tsc",
-    "build:watch": "tsc --watch",
     "clean": "rimraf dist",
+    "build": "npm run clean && tsc",
+    "build:watch": "tsc --watch",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
